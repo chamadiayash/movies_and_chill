@@ -1,0 +1,25 @@
+{
+  "name": "material-kit-react",
+  "homepage": "https://github.com/chamadiayash/material-kit-react",
+  "authors": [
+    "Yash Chamadia"
+  ],
+  "description": "A Badass Material-UI Kit based on Material Design",
+  "main": "dist/index.js",
+  "keywords": [
+    "material",
+    "design",
+    "material-ui",
+    "google",
+    "twitter"
+  ],
+  "license": "MIT License",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "private": true
+}
