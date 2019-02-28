@@ -31,7 +31,7 @@ import work4 from "assets/img/examples/mariya-georgieva.jpg";
 import work5 from "assets/img/examples/clem-onojegaw.jpg";
 
 import profilePageStyle from "assets/jss/material-kit-react/views/profilePage.jsx";
-// queries to be made : 1. get details 2. get movie credits 3. get popular
+
 class ProfilePage extends React.Component {
   render() {
     const { classes, ...rest } = this.props;

@@ -24,7 +24,7 @@ class SectionCarousel extends React.Component {
     const images = [];
     this.props.data.forEach(eachImg => {
       images.push(<div key={eachImg.poster_path}>
-        <a href={'https://www.google.com'}><img
+        <a href={`/movie/${eachImg.id}`}><img
           src={`${this.props.urlPrefix}${eachImg.poster_path}`}
           className="slick-image"
         /></a>

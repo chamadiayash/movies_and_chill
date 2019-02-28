@@ -48,8 +48,7 @@ class LandingPage extends React.Component {
       apiConfig: {},
     };
   }
-  async componentWillMount(state, props) {
-    console.log('fbdsjfbdjhb',state, props);
+  async componentWillMount() {
     let newState = {};
     const res1 = await axios.get(`https://api.themoviedb.org/3/movie/now_playing?api_key=8be76478d5b6af2c6626817549c30df5&language=en-US&page=1`)
     newState.nowPlaying = res1.data.results;
@@ -114,8 +113,30 @@ class LandingPage extends React.Component {
         </Parallax>
         <div className={classNames(classes.main, classes.mainRaised)}>
           <div className={classes.container}>
-            {this.state.apiConfig.images && this.state.upcoming.length > 0 && <SectionCarousel data={this.state.upcoming} urlPrefix={`${this.state.apiConfig.images.secure_base_url}${this.state.apiConfig.images.poster_sizes[2]}`}/>}
-            {this.state.apiConfig.images && this.state.upcoming.length > 0 && <SectionImageList data={this.state.topRated} urlPrefix={`${this.state.apiConfig.images.secure_base_url}${this.state.apiConfig.images.poster_sizes[0]}`}/>}
+          {this.state.apiConfig.images && this.state.nowPlaying.length > 0 && <div>
+            <div className={classes.title}>
+              <h2 style={{backgroundColor: "black"}}>Now playing in theatres near you</h2>
+            </div>
+            <SectionCarousel data={this.state.nowPlaying} urlPrefix={`${this.state.apiConfig.images.secure_base_url}${this.state.apiConfig.images.poster_sizes[1]}`}/>
+          </div>}
+          {this.state.apiConfig.images && this.state.topRated.length > 0 && <div>
+            <div className={classes.title}>
+              <h2 style={{backgroundColor: "black"}}>Top Rated</h2>
+            </div>
+            <SectionImageList data={this.state.topRated} urlPrefix={`${this.state.apiConfig.images.secure_base_url}${this.state.apiConfig.images.poster_sizes[0]}`}/>
+          </div>}
+          {this.state.apiConfig.images && this.state.popular.length > 0 && <div>
+            <div className={classes.title}>
+              <h2 style={{backgroundColor: "black"}}>Popular</h2>
+            </div>
+          <SectionImageList data={this.state.popular} urlPrefix={`${this.state.apiConfig.images.secure_base_url}${this.state.apiConfig.images.poster_sizes[0]}`}/>
+          </div>}
+          {this.state.apiConfig.images && this.state.upcoming.length > 0 && <div>
+            <div className={classes.title}>
+              <h2 style={{backgroundColor: "black"}}>Upcoming</h2>
+            </div>
+            <SectionImageList data={this.state.upcoming} urlPrefix={`${this.state.apiConfig.images.secure_base_url}${this.state.apiConfig.images.poster_sizes[0]}`}/>
+          </div>}
             <TeamSection />
             <WorkSection />
           </div>

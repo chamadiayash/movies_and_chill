@@ -1,4 +1,5 @@
 import React from "react";
+import axios from 'axios';
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // @material-ui/core components
@@ -16,31 +17,48 @@ import GridItem from "components/Grid/GridItem.jsx";
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import NavPills from "components/NavPills/NavPills.jsx";
 import Parallax from "components/Parallax/Parallax.jsx";
-
-import profile from "assets/img/faces/christian.jpg";
-
-import studio1 from "assets/img/examples/studio-1.jpg";
-import studio2 from "assets/img/examples/studio-2.jpg";
-import studio3 from "assets/img/examples/studio-3.jpg";
-import studio4 from "assets/img/examples/studio-4.jpg";
-import studio5 from "assets/img/examples/studio-5.jpg";
-import work1 from "assets/img/examples/olu-eletu.jpg";
-import work2 from "assets/img/examples/clem-onojeghuo.jpg";
-import work3 from "assets/img/examples/cynthia-del-rio.jpg";
-import work4 from "assets/img/examples/mariya-georgieva.jpg";
-import work5 from "assets/img/examples/clem-onojegaw.jpg";
+import MovieDescription from 'views/MoviePage/MovieDescription';
+import SectionCarousel from "views/Components/Sections/SectionCarousel.jsx";
+import CastList from "views/MoviePage/CastList.jsx";
 
 import moviePageStyle from "assets/jss/material-kit-react/views/profilePage.jsx";
-
+// queries to be made : 1. get details 2. get movie credits 3. get popular
+const styles = {
+  heading:{
+    backgroundColor: 'black',
+    color: 'white',
+    align: 'center',
+  }
+};
 class MoviePage extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      movieId: null,
+      movieDetails: {},
+      credits: {},
+      similarMovies: [],
+      apiConfig: {},
+    };
+  }
+  async componentWillMount() {
+    if(this.props.match.params.movieId){
+      const resDetails = await axios.get(`https://api.themoviedb.org/3/movie/${this.props.match.params.movieId}?api_key=8be76478d5b6af2c6626817549c30df5&language=en-US&page=1`);
+      const resCredits = await axios.get(`https://api.themoviedb.org/3/movie/${this.props.match.params.movieId}/credits?api_key=8be76478d5b6af2c6626817549c30df5&language=en-US&page=1`);
+      const resSimilar = await axios.get(`https://api.themoviedb.org/3/movie/${this.props.match.params.movieId}/similar?api_key=8be76478d5b6af2c6626817549c30df5&language=en-US&page=1`);
+      const resConfig = await axios.get(`https://api.themoviedb.org/3/configuration?api_key=8be76478d5b6af2c6626817549c30df5&language=en-US&page=1`);
+      this.setState({
+        movieId: this.props.match.params.movieId,
+        movieDetails: resDetails.data,
+        credits: resCredits.data,
+        similarMovies: resSimilar.data.results,
+        apiConfig: resConfig.data,
+      });
+    }
+  }
   render() {
     const { classes, ...rest } = this.props;
-    const imageClasses = classNames(
-      classes.imgRaised,
-      classes.imgRoundedCircle,
-      classes.imgFluid
-    );
-    const navImageClasses = classNames(classes.imgRounded, classes.imgGallery);
+    console.log('this.props single movie page', this);
     return (
       <div>
         <Header
@@ -55,159 +73,26 @@ class MoviePage extends React.Component {
           {...rest}
         />
         <Parallax small filter image={require("assets/img/profile-bg.jpg")} />
-        <div className={classNames(classes.main, classes.mainRaised)}>
-          <div>
-            <div className={classes.container}>
-              <GridContainer justify="center">
-                <GridItem xs={12} sm={12} md={6}>
-                  <div className={classes.profile}>
-                    <div>
-                      <img src={profile} alt="..." className={imageClasses} />
-                    </div>
-                    <div className={classes.name}>
-                      <h3 className={classes.title}>Christian Louboutin</h3>
-                      <h6>DESIGNER</h6>
-                      <Button justIcon link className={classes.margin5}>
-                        <i className={"fab fa-twitter"} />
-                      </Button>
-                      <Button justIcon link className={classes.margin5}>
-                        <i className={"fab fa-instagram"} />
-                      </Button>
-                      <Button justIcon link className={classes.margin5}>
-                        <i className={"fab fa-facebook"} />
-                      </Button>
-                    </div>
-                  </div>
-                </GridItem>
-              </GridContainer>
-              <div className={classes.description}>
-                <p>
-                  An artist of considerable range, Chet Faker — the name taken
-                  by Melbourne-raised, Brooklyn-based Nick Murphy — writes,
-                  performs and records all of his own music, giving it a warm,
-                  intimate feel with a solid groove structure.{" "}
-                </p>
-              </div>
-              <GridContainer justify="center">
-                <GridItem xs={12} sm={12} md={8} className={classes.navWrapper}>
-                  <NavPills
-                    alignCenter
-                    color="primary"
-                    tabs={[
-                      {
-                        tabButton: "Studio",
-                        tabIcon: Camera,
-                        tabContent: (
-                          <GridContainer justify="center">
-                            <GridItem xs={12} sm={12} md={4}>
-                              <img
-                                alt="..."
-                                src={studio1}
-                                className={navImageClasses}
-                              />
-                              <img
-                                alt="..."
-                                src={studio2}
-                                className={navImageClasses}
-                              />
-                            </GridItem>
-                            <GridItem xs={12} sm={12} md={4}>
-                              <img
-                                alt="..."
-                                src={studio5}
-                                className={navImageClasses}
-                              />
-                              <img
-                                alt="..."
-                                src={studio4}
-                                className={navImageClasses}
-                              />
-                            </GridItem>
-                          </GridContainer>
-                        )
-                      },
-                      {
-                        tabButton: "Work",
-                        tabIcon: Palette,
-                        tabContent: (
-                          <GridContainer justify="center">
-                            <GridItem xs={12} sm={12} md={4}>
-                              <img
-                                alt="..."
-                                src={work1}
-                                className={navImageClasses}
-                              />
-                              <img
-                                alt="..."
-                                src={work2}
-                                className={navImageClasses}
-                              />
-                              <img
-                                alt="..."
-                                src={work3}
-                                className={navImageClasses}
-                              />
-                            </GridItem>
-                            <GridItem xs={12} sm={12} md={4}>
-                              <img
-                                alt="..."
-                                src={work4}
-                                className={navImageClasses}
-                              />
-                              <img
-                                alt="..."
-                                src={work5}
-                                className={navImageClasses}
-                              />
-                            </GridItem>
-                          </GridContainer>
-                        )
-                      },
-                      {
-                        tabButton: "Favorite",
-                        tabIcon: Favorite,
-                        tabContent: (
-                          <GridContainer justify="center">
-                            <GridItem xs={12} sm={12} md={4}>
-                              <img
-                                alt="..."
-                                src={work4}
-                                className={navImageClasses}
-                              />
-                              <img
-                                alt="..."
-                                src={studio3}
-                                className={navImageClasses}
-                              />
-                            </GridItem>
-                            <GridItem xs={12} sm={12} md={4}>
-                              <img
-                                alt="..."
-                                src={work2}
-                                className={navImageClasses}
-                              />
-                              <img
-                                alt="..."
-                                src={work1}
-                                className={navImageClasses}
-                              />
-                              <img
-                                alt="..."
-                                src={studio1}
-                                className={navImageClasses}
-                              />
-                            </GridItem>
-                          </GridContainer>
-                        )
-                      }
-                    ]}
-                  />
-                </GridItem>
-              </GridContainer>
+        {this.state.apiConfig.images && <MovieDescription details={this.state.movieDetails} movieImage={`${this.state.apiConfig.images.secure_base_url}${this.state.apiConfig.images.poster_sizes[2]}${this.state.movieDetails.poster_path}`}/>}
+          {this.state.apiConfig.images && this.state.credits.cast.length > 0 && <div>
+            <div className={classes.title}>
+              <h2 style={{backgroundColor: "black", color: 'white'}}>Cast</h2>
             </div>
+            <CastList data={this.state.credits.cast} urlPrefix={`${this.state.apiConfig.images.secure_base_url}${this.state.apiConfig.images.poster_sizes[2]}`}/>
+          </div>}
+          {this.state.apiConfig.images && this.state.credits.crew.length > 0 && <div>
+            <div className={classes.title}>
+              <h2 style={{backgroundColor: "black", color: 'white'}}>Crew</h2>
+            </div>
+            <CastList data={this.state.credits.crew} urlPrefix={`${this.state.apiConfig.images.secure_base_url}${this.state.apiConfig.images.poster_sizes[2]}`}/>
+          </div>}
+          {this.state.apiConfig.images && this.state.similarMovies.length > 0 && <div>
+            <div className={classes.title}>
+            <h2 style={{backgroundColor: "black", color: 'white'}}>Related movies</h2>
           </div>
-        </div>
-        <Footer />
+            <SectionCarousel data={this.state.similarMovies} urlPrefix={`${this.state.apiConfig.images.secure_base_url}${this.state.apiConfig.images.poster_sizes[4]}`}/>}
+            </div>}
+        <Footer />Now playing in theatres near you
       </div>
     );
   }

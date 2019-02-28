@@ -21,6 +21,9 @@ const styles = theme => ({
     flexWrap: 'nowrap',
     // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
     transform: 'translateZ(0)',
+    paddingLeft: '20px',
+    paddingRight: '20px',
+    maxHeight:'auto',
   },
   title: {
     color: theme.palette.primary.light,
@@ -31,7 +34,7 @@ const styles = theme => ({
   },
 });
 // onClick={() => that.callURL(`/movie/${tile.id}`)} 
-class SectionImageList extends React.Component {
+class CastList extends React.Component {
     callURL(url) {
         console.log('called functions', url, this);
         this.history.push(url);
@@ -41,17 +44,15 @@ class SectionImageList extends React.Component {
         const that = this;
         const images = this.props.data.map((tile)=>{
             return (<GridListTile key={tile.id} style={{cursor: 'pointer'}}>
-                <Link to={`/movie/${tile.id}`}><img src={`${that.props.urlPrefix}${tile.poster_path}`} alt={tile.title} />
-                </Link>
+                <img src={`${that.props.urlPrefix}${tile.profile_path}`} alt={tile.name} />
                 <GridListTileBar
-                title={tile.title}
+                title={tile.name}
                 classes={{
                     root: classes.titleBar,
                     title: classes.title,
                 }}
                 // actionIcon={
                 //     <IconButton>
-                //     <StarBorderIcon className={classes.title} />
                 //     </IconButton>
                 // }
                 />
@@ -59,7 +60,7 @@ class SectionImageList extends React.Component {
         });
         return (
             <div className={classes.root}>
-            <GridList className={classes.gridList} cols={4} spacing={4}>
+            <GridList className={classes.gridList} cols={6} spacing={4}>
                 {images}
             </GridList>
             </div>
@@ -67,5 +68,5 @@ class SectionImageList extends React.Component {
     }
 }
   
-export default withStyles(styles)(SectionImageList);
+export default withStyles(styles)(CastList);
   
