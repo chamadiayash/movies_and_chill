@@ -15,6 +15,7 @@ import Footer from "components/Footer/Footer.jsx";
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import Parallax from "components/Parallax/Parallax.jsx";
 import TabInfo from "views/SearchPage/TabInfo.jsx";
+import constants from "assets/constants.js";
 
 import profilePageStyle from "assets/jss/material-kit-react/views/profilePage.jsx";
 
@@ -38,7 +39,7 @@ class SearchPage extends React.Component {
   }
   async componentWillMount() {
     if(this.props.match.params.searchQuery){
-      const resConfig = await axios.get(`https://api.themoviedb.org/3/configuration?api_key=8be76478d5b6af2c6626817549c30df5&language=en-US&page=1`);
+      const resConfig = await axios.get(`https://api.themoviedb.org/3/configuration?api_key=${constants.apiKey}&language=en-US&page=1`);
       this.setState({
         query: this.props.match.params.searchQuery,
         apiConfig: resConfig.data,

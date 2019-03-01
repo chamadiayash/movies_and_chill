@@ -18,6 +18,7 @@ import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import Parallax from "components/Parallax/Parallax.jsx";
 import CastList from "views/MoviePage/CastList.jsx";
 import SectionImageList from "views/Components/Sections/SectionImageList.jsx";
+import constants from "assets/constants.js";
 
 
 
@@ -36,10 +37,10 @@ class ProfilePage extends React.Component {
   }
   async componentWillMount() {
     if(this.props.match.params.profileId){
-      const resDetails = await axios.get(`https://api.themoviedb.org/3/person/${this.props.match.params.profileId}?api_key=8be76478d5b6af2c6626817549c30df5&language=en-US&page=1`);
-      const resCredits = await axios.get(`https://api.themoviedb.org/3/person/${this.props.match.params.profileId}/combined_credits?api_key=8be76478d5b6af2c6626817549c30df5&language=en-US&page=1`);
-      const respopularOthers = await axios.get(`https://api.themoviedb.org/3/person/popular?api_key=8be76478d5b6af2c6626817549c30df5&language=en-US&page=1`);
-      const resConfig = await axios.get(`https://api.themoviedb.org/3/configuration?api_key=8be76478d5b6af2c6626817549c30df5&language=en-US&page=1`);
+      const resDetails = await axios.get(`https://api.themoviedb.org/3/person/${this.props.match.params.profileId}?api_key=${constants.apiKey}&language=en-US&page=1`);
+      const resCredits = await axios.get(`https://api.themoviedb.org/3/person/${this.props.match.params.profileId}/combined_credits?api_key=${constants.apiKey}&language=en-US&page=1`);
+      const respopularOthers = await axios.get(`https://api.themoviedb.org/3/person/popular?api_key=${constants.apiKey}&language=en-US&page=1`);
+      const resConfig = await axios.get(`https://api.themoviedb.org/3/configuration?api_key=${constants.apiKey}&language=en-US&page=1`);
       this.setState({
         id: this.props.match.params.profileId,
         details: resDetails.data,

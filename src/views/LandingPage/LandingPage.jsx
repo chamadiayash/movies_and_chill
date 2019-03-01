@@ -23,6 +23,7 @@ import SectionCarousel from "views/Components/Sections/SectionCarousel.jsx";
 import SectionImageList from "views/Components/Sections/SectionImageList.jsx";
 
 import landingPageStyle from "assets/jss/material-kit-react/views/landingPage.jsx";
+import constants from "assets/constants.js";
 
 const dashboardRoutes = [];
 /*
@@ -47,15 +48,15 @@ class LandingPage extends React.Component {
   }
   async componentWillMount() {
     let newState = {};
-    const res1 = await axios.get(`https://api.themoviedb.org/3/movie/now_playing?api_key=8be76478d5b6af2c6626817549c30df5&language=en-US&page=1`)
+    const res1 = await axios.get(`https://api.themoviedb.org/3/movie/now_playing?api_key=${constants.apiKey}&language=en-US&page=1`)
     newState.nowPlaying = res1.data.results;
-    const res2 = await axios.get(` https://api.themoviedb.org/3/movie/popular?api_key=8be76478d5b6af2c6626817549c30df5&language=en-US&page=1`)
+    const res2 = await axios.get(` https://api.themoviedb.org/3/movie/popular?api_key=${constants.apiKey}&language=en-US&page=1`)
     newState.popular = res2.data.results;
-    const res3 = await axios.get(`https://api.themoviedb.org/3/movie/top_rated?api_key=8be76478d5b6af2c6626817549c30df5&language=en-US&page=1`)
+    const res3 = await axios.get(`https://api.themoviedb.org/3/movie/top_rated?api_key=${constants.apiKey}&language=en-US&page=1`)
     newState.topRated = res3.data.results;
-    const res4 = await axios.get(`https://api.themoviedb.org/3/movie/upcoming?api_key=8be76478d5b6af2c6626817549c30df5&language=en-US&page=1`)
+    const res4 = await axios.get(`https://api.themoviedb.org/3/movie/upcoming?api_key=${constants.apiKey}&language=en-US&page=1`)
     newState.upcoming = res4.data.results;
-    const res5 = await axios.get(`https://api.themoviedb.org/3/configuration?api_key=8be76478d5b6af2c6626817549c30df5&language=en-US&page=1`)
+    const res5 = await axios.get(`https://api.themoviedb.org/3/configuration?api_key=${constants.apiKey}&language=en-US&page=1`)
     newState.apiConfig = res5.data;
     this.setState(newState);
   }
@@ -129,25 +130,25 @@ class LandingPage extends React.Component {
             <div className={classes.title}>
               <h2 style={{backgroundColor: "black"}}>Now playing in theatres near you</h2>
             </div>
-            <SectionCarousel data={this.state.nowPlaying} urlPrefix={`${this.state.apiConfig.images.secure_base_url}${this.state.apiConfig.images.poster_sizes[1]}`}/>
+            <SectionCarousel data={this.state.nowPlaying} urlPrefix={`${this.state.apiConfig.images.secure_base_url}${this.state.apiConfig.images.poster_sizes[3]}`}/>
           </div>}
           {this.state.apiConfig.images && this.state.topRated.length > 0 && <div>
             <div className={classes.title}>
               <h2 style={{backgroundColor: "black"}}>Top Rated</h2>
             </div>
-            <SectionImageList data={this.state.topRated} urlPrefix={`${this.state.apiConfig.images.secure_base_url}${this.state.apiConfig.images.poster_sizes[0]}`}/>
+            <SectionImageList data={this.state.topRated} urlPrefix={`${this.state.apiConfig.images.secure_base_url}${this.state.apiConfig.images.poster_sizes[2]}`}/>
           </div>}
           {this.state.apiConfig.images && this.state.popular.length > 0 && <div>
             <div className={classes.title}>
               <h2 style={{backgroundColor: "black"}}>Popular</h2>
             </div>
-          <SectionImageList data={this.state.popular} urlPrefix={`${this.state.apiConfig.images.secure_base_url}${this.state.apiConfig.images.poster_sizes[0]}`}/>
+          <SectionImageList data={this.state.popular} urlPrefix={`${this.state.apiConfig.images.secure_base_url}${this.state.apiConfig.images.poster_sizes[2]}`}/>
           </div>}
           {this.state.apiConfig.images && this.state.upcoming.length > 0 && <div>
             <div className={classes.title}>
               <h2 style={{backgroundColor: "black"}}>Upcoming</h2>
             </div>
-            <SectionImageList data={this.state.upcoming} urlPrefix={`${this.state.apiConfig.images.secure_base_url}${this.state.apiConfig.images.poster_sizes[0]}`}/>
+            <SectionImageList data={this.state.upcoming} urlPrefix={`${this.state.apiConfig.images.secure_base_url}${this.state.apiConfig.images.poster_sizes[2]}`}/>
           </div>}
             {/* <TeamSection />
             <WorkSection /> */}

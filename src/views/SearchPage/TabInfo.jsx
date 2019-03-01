@@ -9,6 +9,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 
 import CastList from "views/MoviePage/CastList.jsx";
 import SectionImageList from "views/Components/Sections/SectionImageList.jsx";
+import constants from "assets/constants.js";
 
 class SearchPage extends React.Component {
   constructor() {
@@ -22,7 +23,7 @@ class SearchPage extends React.Component {
   }
   async componentWillMount() {
     if(this.props.pageType){
-        const res = await axios.get(`https://api.themoviedb.org/3/search/${this.props.pageType}?api_key=8be76478d5b6af2c6626817549c30df5&language=en-US&page=${this.state.pageNo}&query=${encodeURI(this.props.query)}`);
+        const res = await axios.get(`https://api.themoviedb.org/3/search/${this.props.pageType}?api_key=${constants.apiKey}&language=en-US&page=${this.state.pageNo}&query=${encodeURI(this.props.query)}`);
         this.setState({
             query: this.props.query,
             pageType:this.props.pageType,

@@ -12,6 +12,7 @@ import Parallax from "components/Parallax/Parallax.jsx";
 import MovieDescription from 'views/MoviePage/MovieDescription';
 import SectionCarousel from "views/Components/Sections/SectionCarousel.jsx";
 import CastList from "views/MoviePage/CastList.jsx";
+import constants from "assets/constants.js";
 
 import moviePageStyle from "assets/jss/material-kit-react/views/profilePage.jsx";
 // queries to be made : 1. get details 2. get movie credits 3. get popular
@@ -28,10 +29,10 @@ class MoviePage extends React.Component {
   }
   async componentWillMount() {
     if(this.props.match.params.movieId){
-      const resDetails = await axios.get(`https://api.themoviedb.org/3/movie/${this.props.match.params.movieId}?api_key=8be76478d5b6af2c6626817549c30df5&language=en-US&page=1`);
-      const resCredits = await axios.get(`https://api.themoviedb.org/3/movie/${this.props.match.params.movieId}/credits?api_key=8be76478d5b6af2c6626817549c30df5&language=en-US&page=1`);
-      const resSimilar = await axios.get(`https://api.themoviedb.org/3/movie/${this.props.match.params.movieId}/similar?api_key=8be76478d5b6af2c6626817549c30df5&language=en-US&page=1`);
-      const resConfig = await axios.get(`https://api.themoviedb.org/3/configuration?api_key=8be76478d5b6af2c6626817549c30df5&language=en-US&page=1`);
+      const resDetails = await axios.get(`https://api.themoviedb.org/3/movie/${this.props.match.params.movieId}?api_key=${constants.apiKey}&language=en-US&page=1`);
+      const resCredits = await axios.get(`https://api.themoviedb.org/3/movie/${this.props.match.params.movieId}/credits?api_key=${constants.apiKey}&language=en-US&page=1`);
+      const resSimilar = await axios.get(`https://api.themoviedb.org/3/movie/${this.props.match.params.movieId}/similar?api_key=${constants.apiKey}&language=en-US&page=1`);
+      const resConfig = await axios.get(`https://api.themoviedb.org/3/configuration?api_key=${constants.apiKey}&language=en-US&page=1`);
       this.setState({
         movieId: this.props.match.params.movieId,
         movieDetails: resDetails.data,
