@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 import axios from 'axios';
@@ -23,11 +24,6 @@ import SectionImageList from "views/Components/Sections/SectionImageList.jsx";
 
 import landingPageStyle from "assets/jss/material-kit-react/views/landingPage.jsx";
 
-// Sections for this page
-// import ProductSection from "./Sections/ProductSection.jsx";
-import TeamSection from "./Sections/TeamSection.jsx";
-import WorkSection from "./Sections/WorkSection.jsx";
-
 const dashboardRoutes = [];
 /*
 queries to be made : 
@@ -46,6 +42,7 @@ class LandingPage extends React.Component {
       topRated: [],
       upcoming: [],
       apiConfig: {},
+      searchQuery: '',
     };
   }
   async componentWillMount() {
@@ -62,8 +59,14 @@ class LandingPage extends React.Component {
     newState.apiConfig = res5.data;
     this.setState(newState);
   }
+  startSearch() {
+    this.history.push(`/search/${this.state.searchQuery}`);
+  }
+  handleChange(val) {
+    console.log('handling change', val);
+    this.setState({searchQuery: val});
+  }
   render() {
-    console.log('this.state', this.state);
     const { classes, ...rest } = this.props;
     return (
       <div>
@@ -89,9 +92,11 @@ class LandingPage extends React.Component {
                 </h4>
                 <br />
                 <div>
-                  <Button justIcon round color="white">
-                    <Search className={classes.searchIcon} />
-                  </Button>
+                  <Link to={`/search/${this.state.searchQuery}`}>
+                    <Button justIcon round color="white">
+                      <Search className={classes.searchIcon} />
+                    </Button>
+                  </Link>
                   <CustomInput
                     white
                     inputRootCustomClasses={classes.inputRootCustomClasses}
@@ -99,13 +104,20 @@ class LandingPage extends React.Component {
                       className: classes.formControl
                     }}
                     inputProps={{
-                      placeholder: "Search",
+                      placeholder: "Movies, TV Shows, People",
                       inputProps: {
                         "aria-label": "Search",
-                        className: classes.searchInput
+                        className: classes.searchInput,
+                        value: this.state.searchQuery,
+                        onChange:(event) => this.handleChange(event.target.value),
                       }
                     }}
-                  />
+                  /> 
+{/* 
+                  <Button justIcon round onCLick={() => this.startSearch()} color="white">
+                    <Search className={classes.searchIcon} />
+                  </Button>
+                  */}
                 </div>
               </GridItem>
             </GridContainer>
@@ -137,8 +149,8 @@ class LandingPage extends React.Component {
             </div>
             <SectionImageList data={this.state.upcoming} urlPrefix={`${this.state.apiConfig.images.secure_base_url}${this.state.apiConfig.images.poster_sizes[0]}`}/>
           </div>}
-            <TeamSection />
-            <WorkSection />
+            {/* <TeamSection />
+            <WorkSection /> */}
           </div>
         </div>
         <Footer />

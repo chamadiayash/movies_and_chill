@@ -1,11 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
-import IconButton from '@material-ui/core/IconButton';
-import StarBorderIcon from '@material-ui/icons/StarBorder';
 
 import { Link } from "react-router-dom";
 
@@ -49,11 +46,6 @@ class SectionImageList extends React.Component {
                     root: classes.titleBar,
                     title: classes.title,
                 }}
-                // actionIcon={
-                //     <IconButton>
-                //     <StarBorderIcon className={classes.title} />
-                //     </IconButton>
-                // }
                 />
             </GridListTile>);
         });

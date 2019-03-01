@@ -1,12 +1,13 @@
 import React from "react";
+import axios from "axios";
+import {Link} from "react-router-dom";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // @material-ui/core components
+import Card from "components/Card/Card.jsx";
+import CardBody from "components/Card/CardBody.jsx";
+import CardFooter from "components/Card/CardFooter.jsx";
 import withStyles from "@material-ui/core/styles/withStyles";
-// @material-ui/icons
-import Camera from "@material-ui/icons/Camera";
-import Palette from "@material-ui/icons/Palette";
-import Favorite from "@material-ui/icons/Favorite";
 // core components
 import Header from "components/Header/Header.jsx";
 import Footer from "components/Footer/Footer.jsx";
@@ -14,25 +15,41 @@ import Button from "components/CustomButtons/Button.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
-import NavPills from "components/NavPills/NavPills.jsx";
 import Parallax from "components/Parallax/Parallax.jsx";
+import CastList from "views/MoviePage/CastList.jsx";
+import SectionImageList from "views/Components/Sections/SectionImageList.jsx";
 
-import profile from "assets/img/faces/christian.jpg";
 
-import studio1 from "assets/img/examples/studio-1.jpg";
-import studio2 from "assets/img/examples/studio-2.jpg";
-import studio3 from "assets/img/examples/studio-3.jpg";
-import studio4 from "assets/img/examples/studio-4.jpg";
-import studio5 from "assets/img/examples/studio-5.jpg";
-import work1 from "assets/img/examples/olu-eletu.jpg";
-import work2 from "assets/img/examples/clem-onojeghuo.jpg";
-import work3 from "assets/img/examples/cynthia-del-rio.jpg";
-import work4 from "assets/img/examples/mariya-georgieva.jpg";
-import work5 from "assets/img/examples/clem-onojegaw.jpg";
 
 import profilePageStyle from "assets/jss/material-kit-react/views/profilePage.jsx";
 
 class ProfilePage extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      id: null,
+      details: {},
+      credits: {},
+      popularOthers: [],
+      apiConfig: {},
+    };
+  }
+  async componentWillMount() {
+    if(this.props.match.params.profileId){
+      const resDetails = await axios.get(`https://api.themoviedb.org/3/person/${this.props.match.params.profileId}?api_key=8be76478d5b6af2c6626817549c30df5&language=en-US&page=1`);
+      const resCredits = await axios.get(`https://api.themoviedb.org/3/person/${this.props.match.params.profileId}/combined_credits?api_key=8be76478d5b6af2c6626817549c30df5&language=en-US&page=1`);
+      const respopularOthers = await axios.get(`https://api.themoviedb.org/3/person/popular?api_key=8be76478d5b6af2c6626817549c30df5&language=en-US&page=1`);
+      const resConfig = await axios.get(`https://api.themoviedb.org/3/configuration?api_key=8be76478d5b6af2c6626817549c30df5&language=en-US&page=1`);
+      this.setState({
+        id: this.props.match.params.profileId,
+        details: resDetails.data,
+        credits: resCredits.data,
+        popularOthers: respopularOthers.data.results,
+        apiConfig: resConfig.data,
+      });
+    }
+  }
+
   render() {
     const { classes, ...rest } = this.props;
     const imageClasses = classNames(
@@ -40,7 +57,7 @@ class ProfilePage extends React.Component {
       classes.imgRoundedCircle,
       classes.imgFluid
     );
-    const navImageClasses = classNames(classes.imgRounded, classes.imgGallery);
+    console.log('profile render', this.state, this.props);
     return (
       <div>
         <Header
@@ -56,161 +73,64 @@ class ProfilePage extends React.Component {
         />
         <Parallax small filter image={require("assets/img/profile-bg.jpg")} />
         <div className={classNames(classes.main, classes.mainRaised)}>
-          <div>
-            <div className={classes.container}>
-              <GridContainer justify="center">
-                <GridItem xs={12} sm={12} md={6}>
-                  <div className={classes.profile}>
-                    <div>
-                      <img src={profile} alt="..." className={imageClasses} />
-                    </div>
-                    <div className={classes.name}>
-                      <h3 className={classes.title}>Christian Louboutin</h3>
-                      <h6>DESIGNER</h6>
-                      <Button justIcon link className={classes.margin5}>
-                        <i className={"fab fa-twitter"} />
-                      </Button>
-                      <Button justIcon link className={classes.margin5}>
-                        <i className={"fab fa-instagram"} />
-                      </Button>
-                      <Button justIcon link className={classes.margin5}>
-                        <i className={"fab fa-facebook"} />
-                      </Button>
-                    </div>
-                  </div>
+        {this.state.apiConfig.images && 
+              <GridContainer>
+                <GridItem xs={12} sm={4} md={2} className={classes.itemGrid}>
+                <Card plain>
+                  <img src={`${this.state.apiConfig.images.secure_base_url}${this.state.apiConfig.images.poster_sizes[2]}${this.state.details.profile_path}`} alt="..." className={imageClasses} />
+                  <CardBody><h4 className={classes.cardTitle}>
+                    {this.state.details.name}
+                    <br />
+                    <small className={classes.smallTitle}>{`Born on ${this.state.details.birthday}. Known for ${this.state.details.known_for_department.toLowerCase()}`}</small>
+                  </h4>
+                  </CardBody>
+                  <CardFooter className={classes.justifyCenter}>
+                    {this.state.homepage && <Link to={this.state.homepage}>
+                    <Button
+                      justIcon
+                      color="transparent"
+                      className={classes.margin5}
+                      href={this.state.homepage}
+                    >
+                      <i className={classes.socials + " fas fa-address-book"} />
+                    </Button></Link>}
+                  </CardFooter>
+              </Card>
                 </GridItem>
-              </GridContainer>
-              <div className={classes.description}>
-                <p>
-                  An artist of considerable range, Chet Faker — the name taken
-                  by Melbourne-raised, Brooklyn-based Nick Murphy — writes,
-                  performs and records all of his own music, giving it a warm,
-                  intimate feel with a solid groove structure.{" "}
-                </p>
-              </div>
-              <GridContainer justify="center">
-                <GridItem xs={12} sm={12} md={8} className={classes.navWrapper}>
-                  <NavPills
-                    alignCenter
-                    color="primary"
-                    tabs={[
-                      {
-                        tabButton: "Studio",
-                        tabIcon: Camera,
-                        tabContent: (
-                          <GridContainer justify="center">
-                            <GridItem xs={12} sm={12} md={4}>
-                              <img
-                                alt="..."
-                                src={studio1}
-                                className={navImageClasses}
-                              />
-                              <img
-                                alt="..."
-                                src={studio2}
-                                className={navImageClasses}
-                              />
-                            </GridItem>
-                            <GridItem xs={12} sm={12} md={4}>
-                              <img
-                                alt="..."
-                                src={studio5}
-                                className={navImageClasses}
-                              />
-                              <img
-                                alt="..."
-                                src={studio4}
-                                className={navImageClasses}
-                              />
-                            </GridItem>
-                          </GridContainer>
-                        )
-                      },
-                      {
-                        tabButton: "Work",
-                        tabIcon: Palette,
-                        tabContent: (
-                          <GridContainer justify="center">
-                            <GridItem xs={12} sm={12} md={4}>
-                              <img
-                                alt="..."
-                                src={work1}
-                                className={navImageClasses}
-                              />
-                              <img
-                                alt="..."
-                                src={work2}
-                                className={navImageClasses}
-                              />
-                              <img
-                                alt="..."
-                                src={work3}
-                                className={navImageClasses}
-                              />
-                            </GridItem>
-                            <GridItem xs={12} sm={12} md={4}>
-                              <img
-                                alt="..."
-                                src={work4}
-                                className={navImageClasses}
-                              />
-                              <img
-                                alt="..."
-                                src={work5}
-                                className={navImageClasses}
-                              />
-                            </GridItem>
-                          </GridContainer>
-                        )
-                      },
-                      {
-                        tabButton: "Favorite",
-                        tabIcon: Favorite,
-                        tabContent: (
-                          <GridContainer justify="center">
-                            <GridItem xs={12} sm={12} md={4}>
-                              <img
-                                alt="..."
-                                src={work4}
-                                className={navImageClasses}
-                              />
-                              <img
-                                alt="..."
-                                src={studio3}
-                                className={navImageClasses}
-                              />
-                            </GridItem>
-                            <GridItem xs={12} sm={12} md={4}>
-                              <img
-                                alt="..."
-                                src={work2}
-                                className={navImageClasses}
-                              />
-                              <img
-                                alt="..."
-                                src={work1}
-                                className={navImageClasses}
-                              />
-                              <img
-                                alt="..."
-                                src={studio1}
-                                className={navImageClasses}
-                              />
-                            </GridItem>
-                          </GridContainer>
-                        )
-                      }
-                    ]}
-                  />
+                <GridItem xs={12} sm={8} md={10} className={classes.itemGrid}>
+                  
+                    <p className={classes.description}>
+                      {this.state.details.biography}
+                    </p>
+          
                 </GridItem>
-              </GridContainer>
+                </GridContainer>
+          }
+
+          {this.state.apiConfig.images && this.state.credits.cast.length > 0 && <div>
+            <div className={classes.title}>
+              <h2 style={{backgroundColor: "black", color: 'white'}}>Cast Credits</h2>
             </div>
-          </div>
+          <SectionImageList data={this.state.credits.cast} urlPrefix={`${this.state.apiConfig.images.secure_base_url}${this.state.apiConfig.images.poster_sizes[2]}`}/>
+          </div>}
+          {this.state.apiConfig.images && this.state.credits.crew.length > 0 && <div>
+            <div className={classes.title}>
+              <h2 style={{backgroundColor: "black", color: 'white'}}>Crew Credits</h2>
+            </div>
+          <SectionImageList data={this.state.credits.crew} urlPrefix={`${this.state.apiConfig.images.secure_base_url}${this.state.apiConfig.images.poster_sizes[2]}`}/>
+          </div>}
+        
         </div>
+        {this.state.apiConfig.images && this.state.popularOthers.length > 0 && <div>
+            <div className={classes.title}>
+              <h2 style={{backgroundColor: "black", color: 'white'}}>Other popular people on the network</h2>
+            </div>
+          <CastList data={this.state.popularOthers} urlPrefix={`${this.state.apiConfig.images.secure_base_url}${this.state.apiConfig.images.poster_sizes[2]}`}/>
+          </div>}
         <Footer />
       </div>
     );
-  }
+  }popular
 }
 
 export default withStyles(profilePageStyle)(ProfilePage);

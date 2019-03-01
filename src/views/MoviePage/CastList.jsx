@@ -1,11 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
-import IconButton from '@material-ui/core/IconButton';
-import StarBorderIcon from '@material-ui/icons/StarBorder';
 
 import { Link } from "react-router-dom";
 
@@ -44,7 +41,7 @@ class CastList extends React.Component {
         const that = this;
         const images = this.props.data.map((tile)=>{
             return (<GridListTile key={tile.id} style={{cursor: 'pointer'}}>
-                <img src={`${that.props.urlPrefix}${tile.profile_path}`} alt={tile.name} />
+                <Link to={`/profile/${tile.id}`}><img src={`${that.props.urlPrefix}${tile.profile_path}`} alt={tile.name} /></Link>
                 <GridListTileBar
                 title={tile.name}
                 classes={{

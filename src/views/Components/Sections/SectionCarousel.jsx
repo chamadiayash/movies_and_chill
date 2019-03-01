@@ -27,6 +27,7 @@ class SectionCarousel extends React.Component {
         <a href={`/movie/${eachImg.id}`}><img
           src={`${this.props.urlPrefix}${eachImg.poster_path}`}
           className="slick-image"
+          alt={eachImg.title}
         /></a>
         <div className="slick-caption">
           <h4>
