@@ -30,28 +30,19 @@ const styles = theme => ({
       'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
   },
 });
-// onClick={() => that.callURL(`/movie/${tile.id}`)} 
 class CastList extends React.Component {
-    callURL(url) {
-        console.log('called functions', url, this);
-        this.history.push(url);
-    }
     render() {
         const { classes } = this.props;
         const that = this;
         const images = this.props.data.map((tile)=>{
             return (<GridListTile key={tile.id} style={{cursor: 'pointer'}}>
-                <Link to={`/profile/${tile.id}`}><img src={`${that.props.urlPrefix}${tile.profile_path}`} alt={tile.name} /></Link>
+                <Link to={`/profile/${tile.id}`}><img src={`${that.props.urlPrefix}${tile.profile_path}`} alt={tile.department} /></Link>
                 <GridListTileBar
                 title={tile.name}
                 classes={{
                     root: classes.titleBar,
                     title: classes.title,
                 }}
-                // actionIcon={
-                //     <IconButton>
-                //     </IconButton>
-                // }
                 />
             </GridListTile>);
         });

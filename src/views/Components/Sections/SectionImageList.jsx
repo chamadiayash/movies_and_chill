@@ -27,12 +27,7 @@ const styles = theme => ({
       'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
   },
 });
-// onClick={() => that.callURL(`/movie/${tile.id}`)} 
 class SectionImageList extends React.Component {
-    callURL(url) {
-        console.log('called functions', url, this);
-        this.history.push(url);
-    }
     render() {
         const { classes } = this.props;
         const that = this;
